@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>TRAFFIC LIGHT SIMULATOR</title>
+</head>
+
+<body>
+    <div class="container">
+        <div id="formContainer">
+            <h2>TRAFFIC LIGHT SIMULATOR</h2>
+            <form>
+                <div class="form-group">
+                    <label for="host">BROKER</label>
+                    <input type="text" name="host" id="host" placeholder="Insert Hostname Broker">
+                </div>
+
+                <div class="form-group">
+                    <label for="port">WEBSOCKET PORT</label>
+                    <input type="number" name="port" id="port" placeholder="Insert Websocket Port">
+                </div>
+
+                <div class="form-group">
+                    <label for="topic_s">TOPIC SUBSCRIBE</label>
+                    <input type="text" name="topic_s" id="topic_s" placeholder="Insert Subscribe Topic">
+                </div>
+
+                <div class="form-group">
+                    <input type="button" id="btn-connect" value="Connect">
+                </div>
+
+                <div class="form-group">
+                    <label for="topic_p">TOPIC PUBLISH</label>
+                    <input type="text" name="topic_p" id="topic_p" placeholder="Insert Publish Topic">
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="red_delay">Red Delay (ms)</label>
+                        <input type="number" id="red_delay" placeholder="3000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="yellow_delay">Yellow Delay (ms)</label>
+                        <input type="number" id="yellow_delay" placeholder="1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="green_delay">Green Delay (ms)</label>
+                        <input type="number" id="green_delay" placeholder="4000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="button" id="btn-publish" value="Simpan Durasi">
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <input type="button" id="btn-start" value="START">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="button" id="btn-stop" value="STOP">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div id="box">
+            <div class="traffic-light">
+                <div id="red" class="red-light light"></div>
+                <div id="yellow" class="yellow-light light"></div>
+                <div id="green" class="green-light light"></div>
+            </div>
+        </div>
+
+    </div>
+    <script src="mqtt.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Tombol Connect dan Disconnect
+        const btnConnect = document.getElementById("btn-connect");
+
+        btnConnect.addEventListener("click", function () {
+            if (btnConnect.value === "Connect") {
+                startConnect();
+            } else {
+                startDisconnect();
+            }
+        });
+
+        // Tombol Simpan Durasi
+        document.getElementById("btn-publish").addEventListener("click", function () {
+            const confirmed = confirm("Apakah kamu yakin ingin mengubah durasi lampu?");
+
+            if (confirmed) {
+                publishMessage(function (success) {
+                    if (success) {
+                        alert("Konfigurasi durasi berhasil dikirim!");
+                    }
+                });
+            }
+        });
+
+        // Tombol Start
+        document.getElementById("btn-start").addEventListener("click", function () {
+            sendCommand("START");
+        });
+
+        // Tombol Stop
+        document.getElementById("btn-stop").addEventListener("click", function () {
+            sendCommand("STOP");
+        });
+    </script>
+
+</body>
+
+</html>
